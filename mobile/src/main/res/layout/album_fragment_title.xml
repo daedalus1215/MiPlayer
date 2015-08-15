@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+  <LinearLayout
+        android:id="@+id/llTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#334c61"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bTitleBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="left"
+            android:background="@drawable/ic_back" />
+
+        <LinearLayout
+            android:id="@+id/llMain"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="#849ec2"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/bRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/capture" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvAlbumTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Album title"
+            android:singleLine="true"
+            android:layout_marginLeft="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+    
+</LinearLayout>

@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/HiddenActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/ffMiniControl"
+        android:layout_width="fill_parent"
+        android:layout_height="86dp"
+        android:layout_alignParentBottom="true" >
+
+        <FrameLayout
+            android:id="@+id/thirdFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="86dp"
+            class="com.example.larry.miplayer.MainActivity$ControlPanelFragment" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ffMiniControl"
+        android:layout_margin="10dp"
+        tools:context=".MainActivity" />
+    <!-- android:background="#000" -->
+
+</RelativeLayout>

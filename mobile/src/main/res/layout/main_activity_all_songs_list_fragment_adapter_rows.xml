@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp" 
+    
+    android:padding="10dp">
+	<!-- android:background="#000" -->
+    <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/capture"  />
+
+
+    <TextView
+        android:id="@+id/tvArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_toRightOf="@id/imageView1"
+        android:layout_below="@+id/tvAlbum"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tvAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView1"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/imageView1"
+        android:text="Now That&apos;s What I Call Music, Vol. 46"
+        android:textSize="20sp" />
+
+</RelativeLayout>
