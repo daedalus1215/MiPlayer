@@ -317,7 +317,7 @@ public class ControlPanelMiniFragment extends Fragment implements
 			tvArtist.setText(currentSong.getArtist());
 			if (currentSong.getAlbumImage() == null) {
 
-				bRemove.setBackgroundResource(R.drawable.capture);
+				bRemove.setBackgroundResource(R.mipmap.capture);
 			} else {
 				Drawable img = Drawable.createFromPath(currentSong
 						.getAlbumImage());
@@ -412,9 +412,9 @@ public class ControlPanelMiniFragment extends Fragment implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getBooleanExtra("Playing", false))
-				bPlay.setBackgroundResource(R.drawable.btn_pause);
+				bPlay.setBackgroundResource(R.drawable.btn_pause_mini);
 			else
-				bPlay.setBackgroundResource(R.drawable.btn_play);
+				bPlay.setBackgroundResource(R.drawable.btn_play_mini);
 		}
 	};
 

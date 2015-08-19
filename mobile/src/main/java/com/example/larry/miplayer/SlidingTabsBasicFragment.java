@@ -16,10 +16,13 @@
 
 package com.example.larry.miplayer;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -52,6 +55,7 @@ public class SlidingTabsBasicFragment extends Fragment {
      */
     private ViewPager mViewPager;
 
+
     /**
      * Inflates the {@link android.view.View} which will be displayed by this {@link android.support.v4.app.Fragment}, from the app's
      * resources.
@@ -59,7 +63,7 @@ public class SlidingTabsBasicFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sample, container, false);
+        return inflater.inflate(R.layout.sliding_tab_fragment_layout, container, false);
     }
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
@@ -67,7 +71,7 @@ public class SlidingTabsBasicFragment extends Fragment {
      * This is called after the {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)} has finished.
      * Here we can pick out the {@link android.view.View}s we need to configure from the content view.
      *
-     * We set the {@link android.support.v4.view.ViewPager}'s adapter to be an instance of {@link SamplePagerAdapter}. The
+     * We set the {@link android.support.v4.view.ViewPager}'s adapter to be an instance of {@link ViewPagerAdapter}. The
      * {@link SlidingTabLayout} is then given the {@link android.support.v4.view.ViewPager} so that it can populate itself.
      *
      * @param view View created in {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}
@@ -77,13 +81,19 @@ public class SlidingTabsBasicFragment extends Fragment {
         // BEGIN_INCLUDE (setup_viewpager)
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter(getFragmentManager()));
-        // END_INCLUDE (setup_viewpager)
+        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         mViewPager.setOffscreenPageLimit(0);
+        // END_INCLUDE (setup_viewpager)
         // BEGIN_INCLUDE (setup_slidingtablayout)
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
         // it's PagerAdapter set.
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+
+        /***************** BEGIN MY CODE */
+        mSlidingTabLayout.setDividerColors(getActivity().getResources().getColor(R.color.main_blue));
+        mSlidingTabLayout.setSelectedIndicatorColors(getActivity().getResources().getColor(R.color.main_yellow));
+        /****************** END OF MY CODE */
+
         mSlidingTabLayout.setViewPager(mViewPager);
         // END_INCLUDE (setup_slidingtablayout)
     }
@@ -95,74 +105,50 @@ public class SlidingTabsBasicFragment extends Fragment {
      * this class is the {@link #getPageTitle(int)} method which controls what is displayed in the
      * {@link SlidingTabLayout}.
      */
-    class SamplePagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         String[] listOfTitles = new String[5];
-        MainActivityAlbumListFragment albumFragment;
-        MainActivityArtistsListFragment artistFragment = new MainActivityArtistsListFragment();
+        Fragment[] fragments = new Fragment[5];
+        FragmentManager fragmentManager;
 
 
-
-
-        SamplePagerAdapter(FragmentManager fm) {
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
+            fragmentManager = fm;
+            /* Populate the list I will use */
             this.listOfTitles[0] = "Playlist";
             this.listOfTitles[1] = "Albums";
             this.listOfTitles[2] = "Folders";
             this.listOfTitles[3] = "Artists";
             this.listOfTitles[4] = "Songs";
-            albumFragment  = new MainActivityAlbumListFragment();
-            artistFragment = new MainActivityArtistsListFragment();
+            /* Populate the fragments I will use */
+            this.fragments[0] = new MainActivityFolderListFragment();
+            this.fragments[1] = new MainActivityAlbumListFragment();
+            this.fragments[2] = new MainActivityFolderListFragment();
+            this.fragments[3] = new MainActivityArtistsListFragment();
+            this.fragments[4] = new MainActivityAllSongsListFragment();
         }
+        /* Standard stuff */
+        @Override
+        public Fragment getItem(int position) {
+            //Log.i("GetItem from SLidingTab", Integer.toString(position));
+            /* Get fragment based off of position */
+            return fragments[position];
 
-        /**
-         * @return the number of pages to display
-         */
+        }
+        /* Standard stuff */
         @Override
         public int getCount() {
-            return 5;
+            return listOfTitles.length;
         }
 
-        /**
-         * @return true if the value returned from {@link #instantiateItem(android.view.ViewGroup, int)} is the
-         * same object as the {@link android.view.View} added to the {@link android.support.v4.view.ViewPager}.
-         */
-        @Override
-        public boolean isViewFromObject(View view, Object o) {
-            return o == view;
-        }
-
+        /* They demand I use this and tell us why */
         // BEGIN_INCLUDE (pageradapter_getpagetitle)
-        /**
-         * Return the title of the item at {@code position}. This is important as what this method
-         * returns is what is displayed in the {@link SlidingTabLayout}.
-         * <p>
-         * Here we construct one using the position value, but for real application the title should
-         * refer to the item's contents.
-         */
         @Override
         public CharSequence getPageTitle(int position) {
             return listOfTitles[position];
         }
         // END_INCLUDE (pageradapter_getpagetitle)
-
-
-        @Override
-        public Fragment getItem(int position) {
-            Log.e("YEAH", Integer.toString(position));
-            switch(position){
-                case 0:
-                    return new MainActivityAllSongsListFragment();
-                case 1:
-                    return new MainActivityAllSongsListFragment();
-                default:
-                    return new MainActivityAllSongsListFragment();
-
-            }
-
-        }
-
-
 
     }
 }

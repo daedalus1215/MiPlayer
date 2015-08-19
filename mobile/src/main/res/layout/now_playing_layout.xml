@@ -1,56 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/nowplaying_background">
 
-    <LinearLayout
+    <!-- Volume Button - TOP -->
+    <RelativeLayout
         android:id="@+id/ll1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center" >
 
-        <Button
+        <ImageButton
             android:id="@+id/ivVolume"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
+            android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:background="@drawable/btn_vol" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="center" >
-
-        <Button
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/btn_vol" />
+        <ImageButton
             android:id="@+id/bBluetoothButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
+            android:layout_toLeftOf="@id/ivVolume"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:layout_margin="10dp"
-            android:background="@android:drawable/ic_lock_lock" />
-    </LinearLayout>
+            android:background="@null"
+            android:src="@drawable/btn_bluetooth" />
+    </RelativeLayout>
 
+
+
+    <!-- SeekBar BELOW llMAIN-->
     <LinearLayout
         android:id="@+id/llseekBarControlLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_above="@id/controlPanel"
-        android:orientation="vertical" >
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:layout_above="@+id/controlPanel"
+        >
 
         <SeekBar
             android:id="@+id/mainSeekBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp" />
+            android:minHeight="10dp"
+            android:maxHeight="15dp"
+            android:progressDrawable="@drawable/seekbar_progress"
+
+            />
 
         <RelativeLayout
             android:id="@+id/textUnderMainSeekBar"
@@ -63,7 +70,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:text="Liberty"
+                android:layout_marginLeft="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -71,17 +80,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:text="Liberty"
+                android:layout_marginRight="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>
 
+
+
+    <!-- Control Panel - align bottom-->
     <RelativeLayout
         android:id="@+id/controlPanel"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:background="#44464c" >
+         >
 
         <LinearLayout
             android:id="@+id/llButtons"
@@ -95,45 +109,64 @@
 
             <ImageButton
                 android:id="@+id/bRew"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:background="@null"
-                android:src="@drawable/btn_rr" />
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_back_now" />
 
             <ImageButton
                 android:id="@+id/bPlayStop"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:background="@drawable/btn_play" />
+                android:background="@drawable/btn_play_now" />
 
             <ImageButton
                 android:id="@+id/bFor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_width="50dp"
+                android:layout_height="500dp"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:background="@null"
-                android:src="@drawable/btn_ff" />
+                android:src="@drawable/btn_for_now" />
         </LinearLayout>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/llCheckBoxes"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@id/llseekBarControlLayout">
+
+        <CheckBox
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:button="@drawable/btn_star"
+            android:id="@+id/checkBox" />
+    </RelativeLayout>
+
+<!-- Playing songs details - above llcheckboxes -->
     <LinearLayout
         android:id="@+id/theTitleOfNowPlaying"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/ll1"
-        android:background="#000000"
-        android:orientation="vertical" 
-        android:layout_toRightOf="@+id/ll2">
+        android:orientation="vertical"
+        android:layout_above="@id/llCheckBoxes">
 
         <TextView
             android:id="@+id/tvNowPlayingArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#fff"
+
             android:layout_gravity="center_horizontal"
             android:singleLine="true"
             android:textSize="14sp" />
@@ -142,6 +175,8 @@
             android:id="@+id/tvNowPlayingSong"
             android:layout_width="wrap_content"
             android:singleLine="true"
+            android:textColor="#fff"
+
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="14sp"
@@ -152,6 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textColor="#fff"
             android:layout_gravity="center_horizontal"
             android:textSize="14sp" />
     </LinearLayout>
@@ -160,8 +196,8 @@
         android:id="@+id/llMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/llseekBarControlLayout"
-        android:layout_below="@id/theTitleOfNowPlaying"
-        android:background="#849ec2" />
-
+        android:layout_below="@id/ll1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_above="@id/theTitleOfNowPlaying" />
 </RelativeLayout>

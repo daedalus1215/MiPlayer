@@ -17,11 +17,14 @@
 package com.example.larry.miplayer.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +32,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.larry.miplayer.R;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -47,6 +53,10 @@ import android.widget.TextView;
  * providing the layout ID of your custom layout.
  */
 public class SlidingTabLayout extends HorizontalScrollView {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
 
     /**
      * Allows complete control over the colors drawn in the tab layout. Set with
@@ -67,6 +77,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     private static final int TITLE_OFFSET_DIPS = 24;
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        return super.onCreateDrawableState(extraSpace);
+    }
+
     private static final int TAB_VIEW_PADDING_DIPS = 16;
     private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
 
@@ -191,6 +207,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
 
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
+
+        /*********** BEGIN OF MY CODE*/
+        /* Set color to white */
+        textView.setTextColor(Color.WHITE);
+        /*********** END OF MY CODE*/
+
         textView.setPadding(padding, padding, padding, padding);
 
         return textView;
@@ -218,10 +240,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (tabTitleView == null && TextView.class.isInstance(tabView)) {
                 tabTitleView = (TextView) tabView;
             }
-
             tabTitleView.setText(adapter.getPageTitle(i));
             tabView.setOnClickListener(tabClickListener);
-
             mTabStrip.addView(tabView);
         }
     }
@@ -260,6 +280,19 @@ public class SlidingTabLayout extends HorizontalScrollView {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             int tabStripChildCount = mTabStrip.getChildCount();
+
+            /************ BEGIN MY CODE MODIFICATIONS*/
+            /* color should be yellow*/
+            ((TextView) mTabStrip.getChildAt(position))
+                    .setTextColor(getResources().getColor(R.color.main_yellow));
+            /* All other children are white */
+            for(int i = 0; i < mTabStrip.getChildCount(); i++){
+                if(i != position){
+                    ((TextView) mTabStrip.getChildAt(i)).setTextColor(Color.WHITE);
+                }
+            }
+            /*********** END OF MY CODE*/
+
             if ((tabStripChildCount == 0) || (position < 0) || (position >= tabStripChildCount)) {
                 return;
             }
@@ -291,6 +324,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         public void onPageSelected(int position) {
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
+                // set the tab to the color Yellow
                 scrollToTab(position, 0);
             }
 

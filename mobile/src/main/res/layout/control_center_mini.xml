@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#44464c"
+    android:background="@color/main_blue"
     android:orientation="horizontal" >
 
     <ImageButton
@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:src="@mipmap/capture" />
+        android:src="@null" />
 
     <!-- </LinearLayout> -->
 
@@ -32,14 +32,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="TextView" />
+            android:textColor="#fff"
 
+            android:text="liberty" />
+<!--
+     Main Color = #2196f3
+     Yellow Color = #fdee69
+-->
         <TextView
             android:id="@+id/tvArtistccm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="TextView" />
+            android:textColor="#fff"
+            android:text="liberty" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,29 +71,34 @@
 
                 <ImageButton
                     android:id="@+id/bRew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="5dp"
                     android:background="@null"
-                    android:src="@drawable/btn_rr" />
+                    android:src="@drawable/btn_back_mini" />
 
                 <ImageButton
                     android:id="@+id/bPlayStop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/btn_play" />
+                    android:background="@drawable/btn_play_mini" />
 
                 <ImageButton
                     android:id="@+id/bFor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:src="@drawable/btn_ff" />
+                    android:src="@drawable/btn_for_mini" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -102,13 +113,17 @@
             android:id="@+id/seekBar1"
             android:layout_width="fill_parent"
             android:layout_height="10dp"
-            android:thumb="@null" />
-
+            android:layout_marginRight="10dp"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:progress="75"
+            android:thumb="@null"
+/>
         <RelativeLayout
             android:id="@+id/textUnderMainSeekBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true">
 
             <TextView
                 android:id="@+id/tvCurrentTime"
@@ -116,6 +131,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="10dp"
+                android:textColor="#fdee69"
+                android:text="liberty"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
@@ -124,17 +141,19 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:text="liberty"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="20sp"
-        android:layout_height="20sp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:layout_margin="2sp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/bRemove"
-        android:src="@drawable/ic_music_note_white" />
+        android:src="@mipmap/capture" />
 
 </RelativeLayout>

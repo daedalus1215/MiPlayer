@@ -1,9 +1,9 @@
 package com.example.larry.miplayer;
 
 import java.util.ArrayList;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import com.example.larry.miplayer.MainActivityFolderListFragmentFolderAdapter.taskConvertImage;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,7 +96,7 @@ public class MainActivityFolderListFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup view = (ViewGroup) inflater
-				.inflate(R.layout.main_activity_folder_list_fragment_layout,
+				.inflate(R.layout.main_activity_list_fragments_layout,
 						null, false);
 		theListView = (ListView) view.findViewById(R.id.listView1);
 
@@ -109,12 +109,12 @@ public class MainActivityFolderListFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
-		//SongsParcel sp = getNewSongParcel(filteredList.get(position));
-		//intent.putExtra(KEY_FOR_ALBUM_CHOICE_ACTIVITY, sp);
-		theEditor.putString(MAIN_ACTIVITY_ITEM_SELECTION, filteredList.get(position).getAlbumId());
-		theEditor.commit();
+
 		Intent intent = new Intent(getActivity(), AlbumActivity.class);
 		intent.putExtra(AlbumActivity.KEY_PRIOR_ACTIVITY, "FOLDER");
+        intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ALBUM_ID,  filteredList.get(position).getAlbumId());
+		intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ARTIST_ID,  filteredList.get(position).getArtist());
+
 		mActivity.startActivity(intent);
 
 	}

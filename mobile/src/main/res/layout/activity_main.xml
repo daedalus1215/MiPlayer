@@ -3,15 +3,17 @@
     style="@style/HiddenActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_blue"
      >
 
 
     <FrameLayout
-        android:id="@+id/sample_content_fragment"
+        android:id="@+id/sliding_tab_basic_fragment"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/ffMiniControl" />
     <!-- android:background="#000" -->
     <!-- android:background="#222" -->
     <LinearLayout

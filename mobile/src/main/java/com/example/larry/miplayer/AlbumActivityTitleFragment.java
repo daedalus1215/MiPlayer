@@ -3,7 +3,6 @@ package com.example.larry.miplayer;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,25 +17,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AlbumActivityTitleFragment extends Fragment implements
 		OnClickListener {
-
+	private final String TAG = "AlbumActTitFrag";
 	private static SongsParcel thePassedParcelAlbum;
 	private AlbumActivity mActivity;
 	private static SharedPreferences theSharedPrefs;
 	private static SharedPreferences.Editor theEditor;
 	private SongHolder theAlbumTitle;
-	private String activityAlbumActivityCameFrom;
 	private LinearLayout llMain;
 	private String THE_ALBUM_ID;
 	private String THE_ARTIST;
-	TextView tv;
+	private String THE_ACTIVITY;
+	TextView tvTitle;
 	ImageButton iv;
 
 	String[] mProjection = { MediaStore.Audio.Albums._ID,
@@ -53,21 +50,23 @@ public class AlbumActivityTitleFragment extends Fragment implements
 		theSharedPrefs = mActivity.getSharedPreferences(
 				MainActivity.PREFS_STORED_PROGRESSION, 0);
 		theEditor = theSharedPrefs.edit();
-		THE_ALBUM_ID = theSharedPrefs.getString(
-				MainActivityAlbumListFragment.MAIN_ACTIVITY_ITEM_SELECTION,
-				"The Album Id");
-		THE_ARTIST = theSharedPrefs
-				.getString("artist_selected", "Jack Johnson");
-		// set which activity we came from (handle FolderListFragment
+	//	THE_ALBUM_ID = theSharedPrefs.getString(
+	//			MainActivityAlbumListFragment.MAIN_ACTIVITY_ITEM_SELECTION,
+	//			"The Album Id");
+		THE_ALBUM_ID = mActivity.whatAlbumDidWeComeFrom;
+	//	THE_ARTIST = theSharedPrefs
+	//			.getString("artist_selected", "Jack Johnson");
+		THE_ARTIST =  mActivity.whatArtistDidWeComeFrom;
+			// set which activity we came from (handle FolderListFragment
 		// differently)
-		activityAlbumActivityCameFrom = mActivity.whatActivityDidWeComeFrom;
+		THE_ACTIVITY = mActivity.whatActivityDidWeComeFrom;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.album_fragment_title, null, false);
-		tv = (TextView) v.findViewById(R.id.tvAlbumTitle);
+		tvTitle = (TextView) v.findViewById(R.id.tvAlbumTitle);
 		iv = (ImageButton) v.findViewById(R.id.bRemove);
 		llMain = (LinearLayout) v.findViewById(R.id.llMain);
 		iv.setOnClickListener(this);
@@ -80,27 +79,17 @@ public class AlbumActivityTitleFragment extends Fragment implements
 		mActivity = (AlbumActivity) getActivity();
 		initPrefs();
 		// set the conditional
-		if (activityAlbumActivityCameFrom.equals("ALBUM"))
+		if (THE_ACTIVITY.equals("ALBUM"))
 			new TaskFindTitleOfSelectedAlbum().execute();
-		else if (activityAlbumActivityCameFrom.equals("FOLDER"))
+		else if (THE_ACTIVITY.equals("FOLDER") || THE_ACTIVITY.equals("ARTIST"))
 			new TaskFindTitleOfSelectedFolder().execute();
 		// PIGGY BACKING ON FOLDER ASYNC, it only required 1 conditional for
-		// implementation, havent tested any of it.
-		else if (activityAlbumActivityCameFrom.equals("ARTIST"))
-			new TaskFindTitleOfSelectedFolder().execute();
 
 	}
 
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// task if the Activity was generated from a AlbumListFragmnt
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-
+	/**
+	 *
+	 */
 	class TaskFindTitleOfSelectedAlbum extends
 			AsyncTask<Integer, Integer, Boolean> {
 
@@ -153,10 +142,9 @@ public class AlbumActivityTitleFragment extends Fragment implements
 
 		@SuppressLint("NewApi")
 		@Override
-		protected void onPostExecute(Boolean result) { // TODO Auto-generated
-														// method stub
+		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			tv.setText(theAlbumTitle.getAlbum());
+			tvTitle.setText(theAlbumTitle.getAlbum());
 			if (bd != null) {
 				iv.setBackground(null);
 				llMain.setBackgroundDrawable(bd);
@@ -165,22 +153,14 @@ public class AlbumActivityTitleFragment extends Fragment implements
 
 	}
 
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// task if the Activity was generated from a FolderListFragmnt
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-
+	/**
+	 *
+	 */
 	class TaskFindTitleOfSelectedFolder extends
 			AsyncTask<Integer, Integer, Boolean> {
 
 		SongHolder theAlbumTitleImage;
-		// what kind of problem will this cause with albums or folders with
-		// multiple artists, like mix cds
+
 		String[] mProjectionAllAudio = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.ARTIST,
 				MediaStore.Audio.Media.ALBUM_KEY, MediaStore.Audio.Media.DATA,
@@ -265,42 +245,31 @@ public class AlbumActivityTitleFragment extends Fragment implements
 		@SuppressLint("NewApi")
 		@Override
 		protected void onPostExecute(Boolean result) { // TODO Auto-generated
-			// have not tested this
+
 			super.onPostExecute(result);
-			if (theAlbumTitle.getAlbum() != null)
-				if (activityAlbumActivityCameFrom.equals("ARTIST"))
-					tv.setText(theSharedPrefs.getString("artist_selected", ""));
-				else
-					tv.setText(theAlbumTitle.getAlbum());
-			if (activityAlbumActivityCameFrom.equals("FOLDER"))
-				if (bd != null) {
-					iv.setBackground(null);
-					llMain.setBackgroundDrawable(bd);
+			if (theAlbumTitle.getAlbum() != null) {
+				Log.d(TAG + "-onPost", "getAlbum() != null");
+				// set the title to the artist name if it is Artist we came from
+				if (THE_ACTIVITY.equals("ARTIST")){
+					tvTitle.setText(theAlbumTitle.getArtist());
 				}
-
+					// set the title to be the album name if it was FOLDER ListView that brought us here
+				else{
+					tvTitle.setText(theAlbumTitle.getAlbum());
+				}
+				if (THE_ACTIVITY.equals("FOLDER"))
+					if (bd != null) {
+						iv.setBackground(null);
+						llMain.setBackgroundDrawable(bd);
+					}
+			}else {
+				Log.d(TAG + "-onPost", "getAlbum() == null");
+			}
 		}
 
 	}
 
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// task if the Activity was generated from ArtistListFragmnt
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////
 
-	class TaskFindTitleOfSelectedArtist extends
-			AsyncTask<Integer, Integer, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(Integer... params) {
-			return null;
-		}
-
-	}
 
 	@Override
 	public void onClick(View v) {

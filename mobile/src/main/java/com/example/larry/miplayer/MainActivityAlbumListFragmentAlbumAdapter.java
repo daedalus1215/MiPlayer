@@ -160,7 +160,7 @@ public class MainActivityAlbumListFragmentAlbumAdapter extends
 			this.position = position;
 			this.holder = holder;
 			placeHolder = mContext.getResources().getDrawable(
-					R.drawable.capture);
+					R.mipmap.capture);
 
 		}
 
@@ -198,7 +198,7 @@ public class MainActivityAlbumListFragmentAlbumAdapter extends
 		DownloadManager() {
 			drawableMap = new HashMap<String, Drawable>();
 			placeHolder = mContext.getResources().getDrawable(
-					R.drawable.capture);
+					R.mipmap.capture);
 		}
 
 		public Drawable fetchDrawable(String urlString) {

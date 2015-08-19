@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,8 +28,21 @@ import android.view.WindowManager;
  */
 public class AlbumActivity extends FragmentActivity {
 
+	private final String TAG = "AlbumActivity";
+
+	// Preferences
+	final private static String PREFS_STORED_PROGRESSION = "PREFS_STORED_PROGRESSION";
+
+
 	public static final String KEY_PRIOR_ACTIVITY = "KEY_PRIOR_ACTIVITY";
 	// it's either ALBUM or FOLDER
+
+    /* Used as a intent extra for MainActivityListFragments for passing albumId */
+    final public static String MAIN_ACTIVITY_ALBUM_ID = "MAIN_ACTIVITY_ALBUM_ID";
+
+	/* Used as a intent extra for MainActivityListFragments (and title) for passing artistID */
+	final public static String MAIN_ACTIVITY_ARTIST_ID = "MAIN_ACTIVITY_ARTIST_ID";
+
 
 	private FragmentManager fmg;
 	boolean isServiceOn = false;
@@ -42,6 +54,8 @@ public class AlbumActivity extends FragmentActivity {
 	// it is our fraqments that grab this constant, and uses different tasks
 	// in order to setup the UI.
 	public String whatActivityDidWeComeFrom;
+    public String whatArtistDidWeComeFrom;
+	public String whatAlbumDidWeComeFrom;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +75,18 @@ public class AlbumActivity extends FragmentActivity {
 		fmg.beginTransaction().add(R.id.thirdFragment, cpf).commit();
 
 		// Set which activity this came from.
-		Intent findPriorActivity = getIntent();
-		whatActivityDidWeComeFrom = findPriorActivity.getExtras().getString(
-				KEY_PRIOR_ACTIVITY);
-		Log.d("Troubleshooting1", whatActivityDidWeComeFrom);
+        Intent findPriorActivity = getIntent();
+		whatActivityDidWeComeFrom =
+                findPriorActivity.getExtras().getString(KEY_PRIOR_ACTIVITY);
+        whatAlbumDidWeComeFrom =
+                findPriorActivity.getExtras().getString(MAIN_ACTIVITY_ALBUM_ID);
+		whatArtistDidWeComeFrom = findPriorActivity.getExtras().getString(MAIN_ACTIVITY_ARTIST_ID);
+
+       // Log.d(TAG + "-Intent", whatAlbumDidWeComeFrom);
+        //Log.d(TAG + "-Intent", whatActivityDidWeComeFrom);
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				PREFS_STORED_PROGRESSION, 0);
+		//Log.d(TAG + "-Pref", sharedPreferences.getString(MAIN_ACTIVITY_ITEM_SELECTION, "test"));
 
 	}
 

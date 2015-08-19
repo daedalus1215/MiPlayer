@@ -190,7 +190,7 @@ public class AudioPlayingService extends Service implements
 		Log.d(TAG, "initNotification()");
 
 		Intent intentForPending = new Intent(getApplicationContext(),
-				MainActivity2.class);
+				MainActivity.class);
 		intentForPending.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_RECEIVER_REPLACE_PENDING);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 2,
@@ -220,9 +220,9 @@ public class AudioPlayingService extends Service implements
 		notiBuilder.setContentText(currentArtistForNotification).setContentTitle(currentSongForNotification)
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentIntent(pendingIntent)
-				.addAction(R.drawable.btn_rr, "", pendingIntentRewind)
-				.addAction(R.drawable.btn_play, "", pendingIntentStop)
-				.addAction(R.drawable.btn_ff, "", pendingIntentForward);
+				.addAction(R.drawable.ic_back_noti, "", pendingIntentRewind)
+				.addAction(R.drawable.ic_play_noti, "", pendingIntentStop)
+				.addAction(R.drawable.ic_for_noti, "", pendingIntentForward);
 			
 
 		notiManager.notify(NOTIFICATION_PLAYING_ID, notiBuilder.build());
@@ -234,7 +234,7 @@ public class AudioPlayingService extends Service implements
 		Log.d(TAG, "initNotification()");
 
 		Intent intentForPending = new Intent(getApplicationContext(),
-				MainActivity2.class);
+				MainActivity.class);
 		intentForPending.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_RECEIVER_REPLACE_PENDING);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 5,
@@ -264,9 +264,9 @@ public class AudioPlayingService extends Service implements
 		notiBuilder.setContentText(currentArtistForNotification).setContentTitle(currentSongForNotification)
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentIntent(pendingIntent)
-				.addAction(R.drawable.btn_rr, "", pendingIntentRewind)
-				.addAction(R.drawable.btn_pause, "", pendingIntentPlay)
-				.addAction(R.drawable.btn_ff, "", pendingIntentForward);
+				.addAction(R.drawable.ic_back_noti, "", pendingIntentRewind)
+				.addAction(R.drawable.ic_pause_noti, "", pendingIntentPlay)
+				.addAction(R.drawable.ic_for_noti, "", pendingIntentForward);
 			
 
 		notiManager.notify(NOTIFICATION_PLAYING_ID, notiBuilder.build());

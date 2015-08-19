@@ -4,9 +4,6 @@ package com.example.larry.miplayer;
 
 import java.util.ArrayList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.example.larry.miplayer.MainActivityArtistsListFragmentAdapter.taskConvertImage;
 
 import android.app.Activity;
@@ -33,22 +30,18 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivityArtistsListFragment extends Fragment implements
 		OnItemClickListener {
 
+    private static SharedPreferences theSharedPrefs;
+    private static SharedPreferences.Editor theEditor;
+
+
 	// CONSTANTS
 	// Preferences
 	final static String PREFS_STORED_PROGRESSION = "PREFS_STORED_PROGRESSION";
 	// PREFERENCE KEY FOR CURRENTLY PLAYING SONGS
 	final private static String PREF_SONG_COCKED_NOW = "PREF_SONG_COCKED_NOW";
-	// For packing into a Parcel
-	final public static String TRACK_ID_KEY = "track_id_key";
-	final public static String TRACK_ARTIST_KEY = "track_artist_key";
-	final public static String TRACK_TITLE_KEY = "track_title_key";
-	final public static String TRACK_ALBUM_KEY = "TRACK_ALBUM_KEY";
-	final public static String TRACK_DATA_KEY = "TRACK_DATA_KEY";
-	final public static String TRACK_ALBUM_ID_KEY = "TRACK_ALBUM_ID_KEY";
-	final public static String TRACK_DURATION_KEY = "TRACK_DURATION_KEY";
 
-	private static SharedPreferences theSharedPrefs;
-	private static SharedPreferences.Editor theEditor;
+
+
 	private ProgressBar mProgressBar;
 	private TextView mLoading;
 	private ListView theListView;
@@ -76,7 +69,7 @@ public class MainActivityArtistsListFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup view = (ViewGroup) inflater
-				.inflate(R.layout.main_activity_artist_list_fragment_layout,
+				.inflate(R.layout.main_activity_list_fragments_layout,
 						null, false);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
 		mLoading = (TextView) view.findViewById(R.id.tvLoading);
@@ -94,7 +87,7 @@ public class MainActivityArtistsListFragment extends Fragment implements
 		initPreferences();
 		initBroadcastReceivers();
 		mActivity.sendBroadcast(new Intent(NowPlaying.ACTION_ASK_SERVICE_ON));
-		mActivity.sendBroadcast(new Intent(NowPlaying.ACTION_ASK_SERVICE_ON));
+		//mActivity.sendBroadcast(new Intent(NowPlaying.ACTION_ASK_SERVICE_ON));
 		tgassl = new TaskGrabAndSetSongList();
 		tgassl.execute();
 	}
@@ -230,29 +223,16 @@ public class MainActivityArtistsListFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
-		//Intent newIntent = new Intent(mActivity, ArtistActivity.class);
-		//SongsParcel sp = getNewSongParcel(filteredList.get(position));
-		
-		//newIntent.putExtra(MainActivity.KEY_FOR_ALBUM_CHOICE_ACTIVITY, sp);
-		
-		theEditor.putString("artist_selected", filteredList.get(position).getArtist());
-		
-		theEditor.commit();
+
 		Intent intent = new Intent(getActivity(), AlbumActivity.class);
 		intent.putExtra(AlbumActivity.KEY_PRIOR_ACTIVITY, "ARTIST");
+        intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ARTIST_ID, filteredList.get(position).getArtist());
+		intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ALBUM_ID, filteredList.get(position).getAlbumId());
+
 		mActivity.startActivity(intent);
 	}
 
-	/*private SongsParcel getNewSongParcel(SongHolder songHolding) {
-		JSONObject jsonObject = new JSONObject();
-		try {
 
-			jsonObject.put(MainActivityArtistsListFragment.TRACK_ARTIST_KEY, songHolding.getArtist());
-			return new SongsParcel(jsonObject);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-	}*/
 
 	BroadcastReceiver receiveIsServiceIsOn = new BroadcastReceiver() {
 

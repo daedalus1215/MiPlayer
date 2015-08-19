@@ -56,7 +56,7 @@ public class NowPlayingViewPagerFragments extends Fragment{
 			Drawable img = Drawable.createFromPath(albumImage);
 			albumArt.setBackgroundDrawable(img);
 		}else {
-			albumArt.setBackgroundResource(R.drawable.capture);
+			albumArt.setBackgroundResource(R.mipmap.capture);
 		}
 
 

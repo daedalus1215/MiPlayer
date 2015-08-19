@@ -149,8 +149,7 @@ public class NowPlaying extends FragmentActivity implements
 	 */
 
 	// DECLARING GLOBAL VARIABLES/FIELDS/OBJECTS
-	private ImageButton bFor, bBack, bPlayStop;
-	private Button bVol, bBlueTooth;
+	private ImageButton bFor, bBack, bPlayStop, bBlueTooth, bVol;
 	private TextView tvAlbum, tvSong, tvArtist;
 	private SeekBar mSeekBar;
 	private ListView mListView;
@@ -323,7 +322,7 @@ public class NowPlaying extends FragmentActivity implements
 		tvArtist = (TextView) findViewById(R.id.tvNowPlayingArtist);
 
 		bPlayStop = (ImageButton) findViewById(R.id.bPlayStop);
-		bPlayStop.setBackgroundResource(R.drawable.btn_pause);
+		bPlayStop.setBackgroundResource(R.drawable.btn_pause_now);
 		bPlayStop.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -355,7 +354,7 @@ public class NowPlaying extends FragmentActivity implements
 			}
 		});
 
-		bVol = (Button) findViewById(R.id.ivVolume);
+		bVol = (ImageButton) findViewById(R.id.ivVolume);
 		bVol.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -367,7 +366,7 @@ public class NowPlaying extends FragmentActivity implements
 
 		tvCurrentT = (TextView) findViewById(R.id.tvCurrentTime);
 		tvTotalT = (TextView) findViewById(R.id.tvTotalTime);
-		bBlueTooth = (Button) findViewById(R.id.bBluetoothButton);
+		bBlueTooth = (ImageButton) findViewById(R.id.bBluetoothButton);
 		bBlueTooth.setOnClickListener(this);
 
 	}
@@ -454,9 +453,9 @@ public class NowPlaying extends FragmentActivity implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getBooleanExtra("Playing", false))
-				bPlayStop.setBackgroundResource(R.drawable.btn_pause);
+				bPlayStop.setBackgroundResource(R.drawable.btn_pause_now);
 			else
-				bPlayStop.setBackgroundResource(R.drawable.btn_play);
+				bPlayStop.setBackgroundResource(R.drawable.btn_play_now);
 		}
 	};
 	BroadcastReceiver receiveBluetoothBroadcasts = new BroadcastReceiver() {

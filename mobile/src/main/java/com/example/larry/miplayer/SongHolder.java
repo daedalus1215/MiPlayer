@@ -1,6 +1,6 @@
 package com.example.larry.miplayer;
 
-class SongHolder {
+public class SongHolder {
 	private String artist, title, album, data, id, albumId, albumImage, artistId;
 	private long duration;
 	private boolean isPodcast, isMusic;

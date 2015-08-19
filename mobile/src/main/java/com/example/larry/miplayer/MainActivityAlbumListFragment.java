@@ -1,14 +1,10 @@
 package com.example.larry.miplayer;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.example.larry.miplayer.MainActivityAlbumListFragmentAlbumAdapter.taskConvertImage;
+
 import android.app.Activity;
-import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,21 +12,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * 
@@ -104,7 +95,7 @@ public class MainActivityAlbumListFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup view = (ViewGroup) inflater.inflate(
-				R.layout.main_activity_album_list_fragment_layout, null, false);
+				R.layout.main_activity_list_fragments_layout, null, false);
 		theListView = (ListView) view.findViewById(R.id.listView1);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
 		tvLoading = (TextView) view.findViewById(R.id.tvLoading);
@@ -152,9 +143,7 @@ public class MainActivityAlbumListFragment extends Fragment implements
 					R.layout.main_activity_album_list_fragment_adapter_rows,
 					filteredList, taskPool);
 
-			ArrayAdapter<String> testAdapter = new ArrayAdapter<String>(
-					mActivity, R.layout.test_fast_list_view_row, alphabet);
-			
+
 
 			theListView.setFastScrollEnabled(false);
 			theListView.setFastScrollAlwaysVisible(false);
@@ -225,64 +214,11 @@ public class MainActivityAlbumListFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
-		theEditor.putString(MAIN_ACTIVITY_ITEM_SELECTION, filteredList.get(position).getAlbumId());
-		theEditor.commit();
+
 		Intent intent = new Intent(getActivity(), AlbumActivity.class);
 		intent.putExtra(AlbumActivity.KEY_PRIOR_ACTIVITY, "ALBUM");
+        intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ALBUM_ID, filteredList.get(position).getAlbumId());
+		intent.putExtra(AlbumActivity.MAIN_ACTIVITY_ARTIST_ID, filteredList.get(position).getArtist());
 		mActivity.startActivity(intent);
-
 	}
-
-
-
-
 }
-
-/*
- * private ListView theFastListView;
-	private Toast toast;
- * 
- * toast = new Toast(mActivity);
- * 
- * theFastListView.setAdapter(testAdapter);
- * 
- * theFastListView.setVisibility(View.VISIBLE);
- * 
- * public void customToast(int position){ LayoutInflater inflater =
- * LayoutInflater.from(mActivity); View layout =
- * inflater.inflate(R.layout.toast, null); TextView text = (TextView)
- * layout.findViewById(R.id.toast); String letter = alphabet[position];
- * text.setTextSize(100); text.setText(letter); toast.setGravity(Gravity.CENTER,
- * 0, 0); toast.setDuration(Toast.LENGTH_SHORT); toast.setView(layout);
- * toast.show(); }
- * 
- * 
- * 
- * 
- * 
- * theFastListView = (ListView) view.findViewById(R.id.fastListView1);
-		theFastListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-
-				if (arg2 != 0) { // conditional is checking for # sign
-					int position = mAdapter.evaluateWhereWeAre(arg2);
-					if (position != -2)
-						theListView.setSelection(position);
-					// Toast toast = new Toast(mActivity);
-					// toast.setGravity(, xOffset, yOffset)
-
-				} else {
-					theListView.setSelection(0);
-				}
-				customToast(arg2);
-			}
-		});
-		
-		
-		
-		
-		
- */

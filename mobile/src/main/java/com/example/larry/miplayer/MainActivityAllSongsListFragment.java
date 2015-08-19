@@ -1,45 +1,29 @@
 package com.example.larry.miplayer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.example.larry.miplayer.MainActivityAllSongsListFragmentAllSongsAdapter.taskConvertImage;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
-
 import android.support.v4.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.AdapterView;
 import android.widget.AbsListView.RecyclerListener;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.larry.miplayer.MainActivityAllSongsListFragmentAllSongsAdapter.taskConvertImage;
+
+import java.util.ArrayList;
 
 public class MainActivityAllSongsListFragment extends Fragment implements
 		OnItemClickListener {
@@ -89,7 +73,7 @@ public class MainActivityAllSongsListFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup view = (ViewGroup) inflater.inflate(
-				R.layout.main_activity_all_songs_list_fragment_layout, null,
+				R.layout.main_activity_list_fragments_layout, null,
 				false);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
 		mLoading = (TextView) view.findViewById(R.id.tvLoading);
@@ -100,7 +84,6 @@ public class MainActivityAllSongsListFragment extends Fragment implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mActivity = getActivity();
 		isServiceOn = false;
@@ -116,8 +99,11 @@ public class MainActivityAllSongsListFragment extends Fragment implements
 	public void onStop() {
 		super.onStop();
 		tgassl.cancel(true);
-		for (taskConvertImage task : taskPool)
-			task.cancel(true);
+        if(taskPool != null){
+            for (taskConvertImage task : taskPool)
+                task.cancel(true);
+        }
+
 		
 		
 		

@@ -136,7 +136,7 @@ public class MainActivityAllSongsListFragmentAllSongsAdapter extends
 			this.position = position;
 			this.holder = holder;
 			placeHolder = mContext.getResources().getDrawable(
-					R.drawable.capture);
+					R.mipmap.capture);
 
 		}
 
@@ -175,7 +175,7 @@ public class MainActivityAllSongsListFragmentAllSongsAdapter extends
 		DownloadManager() {
 			drawableMap = new HashMap<String, Drawable>();
 			placeHolder = mContext.getResources().getDrawable(
-					R.drawable.capture);
+					R.mipmap.capture);
 		}
 
 		public Drawable fetchDrawable(String urlString) {

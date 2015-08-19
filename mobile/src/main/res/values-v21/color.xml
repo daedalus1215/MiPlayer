@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="select_blue">#33b5e5</color>
-    
+    <color name="main_blue">#00a5c3</color>
+    <color name="main_yellow">#fdee69</color>
+    <color name="white">#fafafa</color>
+    <color name="now_blue">#3fb7d8</color>
 </resources>

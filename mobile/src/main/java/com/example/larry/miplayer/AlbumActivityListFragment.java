@@ -3,10 +3,6 @@ package com.example.larry.miplayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +22,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView.OnItemClickListener;
-import com.example.larry.miplayer.SongHolder;
-import com.example.larry.miplayer.ViewHolder;
-import com.example.larry.miplayer.MainActivityFolderListFragmentFolderAdapter.taskConvertImage;
 
 public class AlbumActivityListFragment extends Fragment implements
 		OnItemClickListener {
+	private final String TAG = "AlbumAListFrag";
 
-	final private static String MAIN_ACTIVITY_ITEM_SELECTION = "MAIN_ACTIVITY_ITEM_SELECTION";
-	private String ALBUM_ID;
+
+    private String THE_ALBUM_ID;
+    private String THE_ARTIST;
+    private String THE_ACTIVITY;
+
 	// CONSTANTS
 	// Preferences
 	final private static String PREFS_STORED_PROGRESSION = "PREFS_STORED_PROGRESSION";
@@ -58,7 +55,6 @@ public class AlbumActivityListFragment extends Fragment implements
 	private static SharedPreferences theSharedPrefs;
 	private static SharedPreferences.Editor theEditor;
 	private static boolean isServiceOn = false;
-	private String THE_ARTIST;
 	/**
 	 * ACTION_IS_SERVICE_ON : is a title we use for our FILTER to receive
 	 * whether or not AudioPlayingService is actually on. There is a
@@ -106,8 +102,6 @@ public class AlbumActivityListFragment extends Fragment implements
 	private ListView mListView;
 	private TextView mLoading;
 	ProgressBar mProgressBar;
-	// last activity we were from, Different task for different origins
-	private String activityAlbumActivityCameFrom;
 
 	private ArrayList<SongHolder> ALLOFTHESONGS;
 
@@ -117,11 +111,21 @@ public class AlbumActivityListFragment extends Fragment implements
 		mActivity = (AlbumActivity) getActivity();
 		isServiceOn = false;
 
+		// set which Activity was prior
+		THE_ACTIVITY = mActivity.whatActivityDidWeComeFrom;
+        THE_ARTIST = mActivity.whatArtistDidWeComeFrom;
+        THE_ALBUM_ID = mActivity.whatAlbumDidWeComeFrom;
+
+		//Log.d(TAG + "-IntentAA", activityAlbumActivityAlbumCameFrom);
+		//Log.d(TAG + "-IntentAA",  activityAlbumActivityCameFrom);
+		SharedPreferences sharedPreferences = mActivity.getSharedPreferences(
+				PREFS_STORED_PROGRESSION, 0);
+		//Log.d(TAG + "-Pref", sharedPreferences.getString(MAIN_ACTIVITY_ITEM_SELECTION, "test"));
+
+
 		initPreferences();
 		initBroadcastReceivers();
 
-		// set which Activity was prior
-		activityAlbumActivityCameFrom = mActivity.whatActivityDidWeComeFrom;
 	}
 
 	@Override
@@ -134,12 +138,6 @@ public class AlbumActivityListFragment extends Fragment implements
 		theSharedPrefs = mActivity.getSharedPreferences(
 				PREFS_STORED_PROGRESSION, 0);
 		theEditor = theSharedPrefs.edit();
-		// if it came from album?? ??? ??
-		ALBUM_ID = theSharedPrefs.getString(MAIN_ACTIVITY_ITEM_SELECTION, "");
-		// if it came from artist
-		THE_ARTIST = theSharedPrefs
-				.getString("artist_selected", "Jack Johnson");
-
 	}
 
 	private void initBroadcastReceivers() {
@@ -157,12 +155,12 @@ public class AlbumActivityListFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (activityAlbumActivityCameFrom.equals("ALBUM")
-				|| activityAlbumActivityCameFrom.equals("FOLDER"))
+		if (THE_ACTIVITY.equals("ALBUM")
+				|| THE_ACTIVITY.equals("FOLDER"))
 			new Task().execute();
 		// else if (activityAlbumActivityCameFrom.equals("FOLDER"))
 		// new TaskFolderListCompiled().execute();
-		else if (activityAlbumActivityCameFrom.equals("ARTIST"))
+		else if (THE_ACTIVITY.equals("ARTIST"))
 			new TaskArtist().execute();
 	}
 
@@ -283,31 +281,10 @@ public class AlbumActivityListFragment extends Fragment implements
 			isServiceOn = true;
 		}
 	};
-	
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
 
-	// 
-	// 
-
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// not actually using
-	// ///////////////////////////////////////////////////////
-	
-	
-	
-	
-	
-	
-	
-
+    /**
+     *
+     */
 	class Task extends AsyncTask<String, Integer, Boolean> {
 
 		@Override
@@ -333,6 +310,11 @@ public class AlbumActivityListFragment extends Fragment implements
 
 	}
 
+    /**
+     * Run this in our ASyncTasks it fills in the list
+     * for the AlbumActivities ListFragment
+     * @return The album that was chosen with all of it's songs.
+     */
 	private ArrayList<SongHolder> updateLists() {
 		// get our Cursor
 		String[] mProjection = { MediaStore.Audio.Media._ID,
@@ -367,156 +349,15 @@ public class AlbumActivityListFragment extends Fragment implements
 		}
 		ArrayList<SongHolder> theChosenAlbum = new ArrayList<SongHolder>();
 		for (int i = 0; i < ALLOFTHESONGS.size(); i++) {
-			if (ALBUM_ID.equals(ALLOFTHESONGS.get(i).getAlbumId())) {
+			if (THE_ALBUM_ID.equals(ALLOFTHESONGS.get(i).getAlbumId())) {
 				theChosenAlbum.add(ALLOFTHESONGS.get(i));
 			}
 		}
 		return theChosenAlbum;
 	}
 
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
 
-	// THIS IS THE TASK AND THE METHOD THAT IS USED BY IT TO SETUP A FILTER FOR
-	// WHICH FOLDER AND THE ALBUM ART SHOULD BE ASSOCIATED WITH THAT CHOICE
 
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// ///////////////////////////////////////////////////////
-	// not actually using
-	// ///////////////////////////////////////////////////////
-
-	class TaskFolderListCompiled extends AsyncTask<String, Integer, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			ALLOFTHESONGS = new ArrayList<SongHolder>();
-
-			theFilteredSongList = new ArrayList<SongHolder>();
-
-			theFilteredSongList = updateFolderList();
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-
-			mAdapter = new ListAdapter(getActivity(),
-					R.layout.album_activity_list_fragment_adapter_row,
-					theFilteredSongList);
-			mListView.setAdapter(mAdapter);
-			mLoading.setVisibility(View.GONE);
-			mProgressBar.setVisibility(View.GONE);
-			mListView.setVisibility(View.VISIBLE);
-
-		}
-	}
-
-	private ArrayList<SongHolder> updateFolderList() {
-		Cursor mCursorAllAlbumArt;
-
-		mCursor = getActivity().getContentResolver().query(
-				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mProjection,
-				MediaStore.Audio.Media.DURATION + ">= 60000", null,
-				MediaStore.Audio.Media.ALBUM);
-
-		mCursor.moveToFirst();
-
-		while (mCursor.moveToNext()) {
-			SongHolder s = new SongHolder();
-			s.setAlbum(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-			s.setArtist(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-			s.setData(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media.DATA)));
-			s.setId(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media._ID)));
-			s.setTitle(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-			s.setAlbumId(mCursor.getString(mCursor
-					.getColumnIndex(MediaStore.Audio.Media.ALBUM_KEY)));
-			s.setDuration(mCursor.getLong(mCursor
-					.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
-			ALLOFTHESONGS.add(s);
-		}
-
-		// Go through our Cursor
-		ArrayList<SongHolder> noDuplicateAlbum = new ArrayList<SongHolder>(
-				ALLOFTHESONGS.size());
-		int counter = 0;
-		for (int i = 0; i < ALLOFTHESONGS.size(); i++) {
-			for (int j = 0; j < noDuplicateAlbum.size(); j++) {
-				if (noDuplicateAlbum.get(j).getAlbumId()
-						.equals(ALLOFTHESONGS.get(i).getAlbumId())
-						|| ALLOFTHESONGS.get(i).getAlbum().equals("unknown")) {
-					counter = 1;
-				} else {
-					counter = 0;
-				}
-			}
-
-			if (counter == 0) {
-				noDuplicateAlbum.add(ALLOFTHESONGS.get(i));
-				counter = 0;
-			}
-
-		}
-
-		mCursorAllAlbumArt = getActivity().getContentResolver().query(
-				MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-				newProjectionForAlbumArt, null, null,
-				MediaStore.Audio.Albums.ALBUM_ART);
-
-		ArrayList<SongHolder> SomeReasonFrantiNotPickingUpSoWeDoublingDownSearch = new ArrayList<SongHolder>(
-				noDuplicateAlbum.size());
-
-		mCursorAllAlbumArt.moveToFirst();
-		while (mCursorAllAlbumArt.moveToNext()) {
-			AllSongHolder s = new AllSongHolder();
-			s.setArtist(mCursorAllAlbumArt.getString(mCursorAllAlbumArt
-					.getColumnIndex(MediaStore.Audio.Albums.ARTIST)));
-
-			s.setAlbumId(mCursorAllAlbumArt.getString(mCursorAllAlbumArt
-					.getColumnIndex(MediaStore.Audio.Albums.ALBUM_KEY)));
-
-			String albumArt = mCursorAllAlbumArt.getString(mCursorAllAlbumArt
-					.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART));
-			s.setAlbumImage(albumArt);
-
-			SomeReasonFrantiNotPickingUpSoWeDoublingDownSearch.add(s);
-
-		}
-
-		for (int i = 0; i < noDuplicateAlbum.size(); i++) {
-			for (int j = 0; j < SomeReasonFrantiNotPickingUpSoWeDoublingDownSearch
-					.size(); j++) {
-				if (noDuplicateAlbum
-						.get(i)
-						.getAlbumId()
-						.toString()
-						.equals(SomeReasonFrantiNotPickingUpSoWeDoublingDownSearch
-								.get(j).getAlbumId())) {
-					String albumArt = SomeReasonFrantiNotPickingUpSoWeDoublingDownSearch
-							.get(j).getAlbumImage();
-					noDuplicateAlbum.get(i).setAlbumImage(albumArt);
-
-				}
-			}
-		}
-		// Go through our Cursor
-		mCursor.close();
-		mCursorAllAlbumArt.close();
-		return noDuplicateAlbum;
-
-	}
 
 	//
 
